@@ -83,7 +83,7 @@ df.log.data <- data %>%
          departmentid = trimws(str_replace_all(str_extract(V6, ", [0-9]+ ,"),",", " ")),
          clientid = trimws(str_replace(str_extract(V6, ", [0-9]+ "),",", " "))) %>%
   filter(grepl(" \\d",V6)) %>% 
-  select(hour, employeeid, departmentid, clientid)
+  select(employeeid, departmentid, clientid)
 # --- END------
 # 
 # 
