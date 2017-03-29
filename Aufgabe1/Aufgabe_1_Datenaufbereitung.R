@@ -84,6 +84,8 @@ df.log.data <- data %>%
          clientid = trimws(str_replace(str_extract(V6, ", [0-9]+ "),",", " "))) %>%
   filter(grepl(" \\d",V6)) %>% 
   select(employeeid, departmentid, clientid)
+
+head(df.log.data)
 # --- END------
 # 
 # 
@@ -109,6 +111,8 @@ df.log.data <- data %>%
          clientid = trimws(str_replace(str_extract(V6, ", [0-9]+ "),",", " "))) %>%
   filter(grepl(" \\d",V6)) %>% 
   select(hour, employeeid, departmentid, clientid)
+
+head(df.log.data)
 
 # --- END------
 
@@ -143,13 +147,14 @@ hist(data.forensik$hour)
 early.hour <- data.forensik %>% 
   filter(hour < 1)
 
-head(early)
+head(early.hour)
 
 # 2. Herausfinden bei welchem 
-employee.most.access <- early %>%
+employee.most.access <- early.hour %>%
   group_by(employeeid) %>% 
   summarise(n = n()) %>% 
   ungroup() %>% 
   filter(n == max(n))
 
+employee.most.access
 # Der Employee 23 hat am meisten zugriffe in den frühen Stunden.

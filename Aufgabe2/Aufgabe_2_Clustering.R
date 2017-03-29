@@ -76,9 +76,10 @@ with(df_sample, {
   scatterplot3d(x,y,z, color = class)
 })
 
-with(data.frame(km$centers), {
-  scatterplot3d(x,y,z)
-})
+# Dies hat wirft einen Fehler
+# with(data.frame(km$centers), {
+#   scatterplot3d(x,y,z)
+# })
 
 centers_df = km$centers
 colnames(centers_df) = c("x","y","z")
