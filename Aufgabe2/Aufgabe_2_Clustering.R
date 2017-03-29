@@ -4,7 +4,7 @@
 #
 # Author:      Matthias Brunner
 #
-# Created:     14.03.2017
+# Created:     28.03.2017
 #-------------------------------------------------------------------------------
 
 
@@ -18,7 +18,7 @@
 # 
 
 #set the working directory specific to my machine
-setwd("C:/Workspace/Weiterbildung/DataMining/R-Projects/DataMining/Aufgabe2/HMP_Dataset")
+setwd("C:/Workspace/Weiterbildung/05_DataMining/R-Projects/DataMining/Aufgabe2/HMP_Dataset")
 
 #create a data frame from all files in specified folder
 create_activity_dataframe = function(activityFolder,classId) {
@@ -60,12 +60,12 @@ n = nrow(df)
 
 kmeans(df,centers=number_of_clusters)$centers
 
-df_x_y = cbind(df$x,df$y)
+df_x_y = cbind(df$x,df$y,df$z)
 determine_number_of_clusters(df_x_y)
 km = kmeans(df_x_y,centers=number_of_clusters)
 
 
-truthVector = km$cluster != df$class
+truthVector = km$cluster == df$class
 good = length(truthVector[truthVector==TRUE])
 bad = length(truthVector[truthVector==FALSE])
 good/(good+bad)
@@ -97,8 +97,7 @@ with(data.frame(centers_df), {
 # Average resultant acceleration (1/n * sum [???(x² + y² + z²)])
 # Average time between peaks (max) (Y-axis)
 
-# 
-# 1/n * ??? ???(x² + y² + z²)
+# Berechnen der Mittelwerte, der Varianzen ...
 library(dplyr)
 df_sample_average_acceleration <- df %>%
   group_by(class) %>%
@@ -113,25 +112,32 @@ df_sample_average_acceleration <- df %>%
          z.abs = abs(z - mean(z))) %>%
   ungroup()
 
+# Betrachten des Data Frames
 head(df_sample_average_acceleration)
+# Ausgabe der Anzahl Elemente in Data Frame.
 nrow(df_sample_average_acceleration)
 
 
-df_x_y_z_mean.x_mean.y_mean.z = cbind(df_sample_average_acceleration$x,
+# Erstellen eines neuen Data Frame mit der x, y, z und den Mittelwerten von x, y und z.
+df_x_y_z_mean.x_mean.y_mean.z <- cbind(df_sample_average_acceleration$x,
                                       df_sample_average_acceleration$y,
                                       df_sample_average_acceleration$z,
                                       df_sample_average_acceleration$x.mean,
                                       df_sample_average_acceleration$y.mean,
                                       df_sample_average_acceleration$z.mean)
 
+# Ausgabe des clusters Graphen
 determine_number_of_clusters(df_x_y_z_mean.x_mean.y_mean.z)
-km = kmeans(df_x_y_z_mean.x_mean.y_mean.z, centers=number_of_clusters)
+# Berechnen des kmeans!
+km <- kmeans(df_x_y_z_mean.x_mean.y_mean.z, centers=number_of_clusters)
 nrow(df)
 nrow(df_x_y_z_mean.x_mean.y_mean.z)
 
 # da bei km$cluster die definition zufällig ist muss hier ev. == oder != verwendet werden!
-truthVector = km$cluster == df$class
+truthVector <- km$cluster == df$class
 good = length(truthVector[truthVector==TRUE])
 bad = length(truthVector[truthVector==FALSE])
 good/(good+bad)
 
+# Ausgabe [1] 0.9036911
+# Die Qualität des Clusters konnte angehoben werden.
